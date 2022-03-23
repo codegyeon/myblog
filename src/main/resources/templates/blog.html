@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<!--//<html xmlns:th="http://www.thymeleaf.org">-->
+<head>
+    <meta charset="UTF-8" http-equiv="content-type" content="text/html">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Title</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <!-- bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+            crossorigin="anonymous"></script>
+    <style>
+        .title_box{
+            margin: 50px auto;
+            display: block;
+            background-color: indianred;
+            text-align: center;
+        }
+    </style>
+<!--    <script th:inline="javascript">-->
+<!--        window.location.href = 'http://www.example.com/api/response?id=' + [[${id}]];-->
+<!--    </script>-->
+    <script>
+        function mainpagerun(){
+            window.location.href = "home";
+        }
+
+        $(document).ready(function () {
+            // HTML 문서를 로드할 때마다 실행합니다.
+            getMessages();
+        })
+
+        // 메모를 불러와서 보여줍니다.
+        function getMessages() {
+            // 1. 기존 메모 내용을 지웁니다.
+            $('#card_main').empty();
+            // 2. 메모 목록을 불러와서 HTML로 붙입니다.
+            $.ajax({
+                type: 'GET',
+                url: '/api/blog',
+                success: function(response){
+                    for(let i =0; i<response.length; i++){
+                        let blog = response[i];
+                        let id = blog.id;
+                        let title = blog.title;
+                        let name = blog.name;
+                        let contents = blog.contents;
+                        let modifiedAt = blog.modifiedAt
+                        addHTML(id,title,name,contents, modifiedAt);
+                    }
+                }
+            })
+        }
+        // 메모 하나를 HTML로 만들어서 body 태그 내 원하는 곳에 붙입니다.
+        function addHTML(id,title, username, contents, modifiedAt) {
+            // 1. HTML 태그를 만듭니다.
+            let tempHtml = `<div class="card" style="width: 18rem;">
+                                <div class="card-body">
+                                    <h5 class="card-title">${title}</h5>
+                                    <p class="card-text">${modifiedAt}</p>
+                                    <a href="../static/postpage.html" class="btn btn-primary">자세히 보러가기</a>
+                                </div>
+                            </div>`;
+            // 2. #cards-box 에 HTML을 붙인다.
+            $('#card_main').append(tempHtml);
+        }
+    </script>
+</head>
+<body>
+<div>
+    <h1 class="title_box" style="cursor: pointer;" onclick="">나만의 항해 블로그</h1>
+</div>
+<div id="card_main">
+    <div class="card" style="width: 18rem;">
+        <div class="card-body">
+            <h5 class="card-title">Special title treatment</h5>
+            <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+            <a href="postpage" class="btn btn-primary">자세히 보러가기</a>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

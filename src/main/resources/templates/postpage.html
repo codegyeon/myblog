@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>글쓰기</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+            crossorigin="anonymous"></script>
+
+    <style>
+        .boxx{
+            width: 500px;
+            position: center;
+            display: block;
+            margin: 300px auto;
+        }
+
+        .title_box{
+            margin: 50px auto;
+            display: block;
+            background-color: indianred;
+            text-align: center;
+        }
+
+    </style>
+    <script>
+        function mainpagerun(){
+            window.location.href = "/";
+        }
+        // 메모를 생성합니다.
+        function writePost() {
+            // 1. 작성한 메모를 불러옵니다.
+            let title = $("#ajwjfl1").val();
+            let name = $("#ajwjfl2").val();
+            let contents = $("#ajwjfl3").val();
+
+            // 2. 작성한 메모가 올바른지 isValidContents 함수를 통해 확인합니다.
+            // if (isValidContents(contents) == false) {
+            //     return;
+            // }
+            // 3. genRandomName 함수를 통해 익명의 username을 만듭니다.
+            // let username = genRandomName(10);
+
+            // 4. 전달할 data JSON으로 만듭니다.
+            let data = {"title" : title,
+                "name": name,
+                "contents": contents};
+
+            // 5. POST /api/memos 에 data를 전달합니다.
+            $.ajax({
+                type: "POST",
+                url: "/api/blog/postpage",
+                contentType: "application/json",
+                data: JSON.stringify(data),
+                success: function (response) {
+                    alert('메시지가 성공적으로 작성되었습니다.');
+                    window.location.href="/"
+                }
+            });
+        }
+    </script>
+</head>
+<body>
+<h1 class="title_box" style="cursor: pointer;" onclick="mainpagerun()">나만의 항해 블로그</h1>
+<div class="boxx">
+    <div class="input-group input-group-sm mb-3">
+        <span class="input-group-text" id="inputGroup-sizing-sm1">제목</span>
+        <input type="text" id="ajwjfl1"  class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
+    </div>
+
+    <div class="input-group mb-3">
+        <span class="input-group-text" id="inputGroup-sizing-default2">이름</span>
+        <input type="text" id="ajwjfl2" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+    </div>
+
+    <div class="input-group input-group-lg">
+        <span class="input-group-text" id="inputGroup-sizing-lg3">내용</span>
+        <input type="text" id="ajwjfl3" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-lg">
+    </div>
+    <button  style="margin: auto; display: block" onclick="writePost()">작성하기</button>
+</div>
+</body>
+</html>
